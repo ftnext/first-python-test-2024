@@ -3,7 +3,7 @@ name = "pytest-introduction"
 version = "0.1.0"
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "freezegun"]
 
 [tool.pytest.ini_options]
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
