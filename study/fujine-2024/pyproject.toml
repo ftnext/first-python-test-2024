@@ -1,10 +1,10 @@
 [project]
 name = "pytest-introduction"
 version = "0.1.0"
-dependencies = ["httpx"]
+dependencies = ["httpx", "SQLAlchemy"]
 
 [project.optional-dependencies]
-dev = ["pytest", "freezegun"]
+dev = ["pytest", "freezegun", "pytest-mysql"]
 
 [tool.pytest.ini_options]
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
