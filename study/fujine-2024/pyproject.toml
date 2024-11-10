@@ -6,6 +6,7 @@ dependencies = ["httpx", "SQLAlchemy"]
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "pytest-randomly",
     "freezegun",
     "pytest-mysql",
     # "PyMySQL",
