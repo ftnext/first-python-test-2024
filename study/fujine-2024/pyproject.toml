@@ -1,6 +1,7 @@
 [project]
 name = "pytest-introduction"
 version = "0.1.0"
+dependencies = ["httpx"]
 
 [project.optional-dependencies]
 dev = ["pytest", "freezegun"]
