@@ -30,3 +30,7 @@ language = 'ja'
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+ogp_social_cards = {
+    "enable": False,
+}
