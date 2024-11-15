@@ -55,3 +55,24 @@ class Test_モックの例:
     def test_6以外の目が出たら凶と返す(self, mock_randint):
         assert draw_lottery() == "凶"
         mock_randint.assert_called_once_with(1, 6)
+
+
+@pytest.fixture
+def always_6_randint(monkeypatch):
+    randint_call_count = 0
+
+    def randint_mock(a, b):
+        assert (a, b) == (1, 6)
+        nonlocal randint_call_count
+        randint_call_count += 1
+        return 6
+
+    monkeypatch.setattr(random, "randint", randint_mock)
+
+    yield
+
+    assert randint_call_count == 1
+
+
+def test_6の目が出たら超吉と返す_リファクタ版(always_6_randint):
+    assert draw_lottery() == "超吉"
