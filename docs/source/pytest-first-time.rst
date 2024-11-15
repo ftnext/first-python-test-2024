@@ -4,9 +4,36 @@
 テストコードが書けると何がいいのか
 ----------------------------------------
 
-不安は **退屈** に変わる
+* 良いコード（変更しやすい、言語の機能を引き出している）に **近づけていく**
+* 今の全霊をかけたコードだが、よりよい書き方を知ったら書き換えたい
 
-https://ftnext.github.io/2023-slides/pyconapac/practice-test-code.html#/6
+| 変更するたびに、壊していないか不安
+| 壊す＝振る舞いを変えてしまう
+
+3つのアプローチ
+
+* 祈る 🙏🙏「どうか変わっていませんように」🙏🙏
+
+    * 不安だけど確認はしない
+
+* 手で動作確認 ✋
+
+    * 対話モードでimportして動作確認
+    * 確認するので安心できるが、関数の数が増えると現実的でない
+
+* コードを書いて動作確認 🤖（自動テスト）
+
+    * 「手で動作確認」の自動化
+    * プログラムで使う部品のコードは、プログラムを書いて動作確認（ちょうぜつ本）
+    * 自動化しているので繰り返し確認できる
+
+| 自動テストにより、変更して振る舞いを変えていないかという不安は **退屈** に変わる
+| 「自動テストが1つも失敗していないから振る舞いは変わってない！」（*回帰テスト*）
+
+| このテストは開発者のためのもの（開発中に自信を持てる）
+| 品質保証のためのテストは別に必要です
+
+IMO：テストコード書かないなんて、 *もったいない* ですよ
 
 ``assert`` 文
 --------------------
@@ -42,7 +69,17 @@ https://ftnext.github.io/2023-slides/pyconapac/practice-test-code.html#/6
 
 書いてみて練習しよう（別の数字、別の型）
 
+.. note:: assert文のドキュメント
+
+    言語リファレンス `7.3. assert 文 <https://docs.python.org/ja/3/reference/simple_stmts.html#the-assert-statement>`__
+
 .. note:: 表明なるもの
+
+    「``assert`` って（pytestのテストコード以外で）どこで使うの？」と思った方へ
+
+    .. raw:: html
+
+        <iframe class="speakerdeck-iframe" style="border: 0px; background: rgba(0, 0, 0, 0.1) padding-box; margin: 0px; padding: 0px; border-radius: 6px; box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 40px; width: 100%; height: auto; aspect-ratio: 560 / 420;" frameborder="0" src="https://speakerdeck.com/player/68b40ca9983a48dc9efec540ab98f88d?slide=69" title="PHP7 で堅牢なコードを書く - 例外処理、表明プログラミング、契約による設計 / PHP Conference 2016" allowfullscreen="true" data-ratio="1.3333333333333333"></iframe>
 
 ディレクトリ構成
 --------------------
@@ -84,7 +121,11 @@ pytestは
 | 影響 `unittestで始めるユニットテスト入門 (PyCon JP 2019) <https://pycon.jp/2019/schedule/?sessionId=213>`__
 | https://docs.google.com/presentation/d/1F0fkcbuuQBCbVDLD2v8YQlMOqEMnF_PpI2AAR5nwhfI/edit#slide=id.g628217d75a_0_0
 
-キーワード src-layout
+.. note:: キーワード src-layout
+
+    :file:`src` ディレクトリを作るやり方。OSSのライブラリではこちらが主流
+
+    `src レイアウト対フラットレイアウト <https://packaging.python.org/ja/latest/discussions/src-layout-vs-flat-layout/>`__
 
 テストを実行
 --------------------
@@ -123,8 +164,8 @@ pytestは
 
 用語紹介
 
-:pass: テストが通る（すべてのテストが成功）
-:fail: テストが落ちる（1つでもテストが失敗）
+:pass: テストが通る（すべてのテストが成功。pytestでは . が並ぶ）
+:fail: テストが落ちる（1つでもテストが失敗。F（やE）が1つ以上ある）
 
 何をしたのか
 --------------------
@@ -156,6 +197,12 @@ pytestは
 | 準備ができました！
 | :file:`tests/test_practice.py` は環境構築の確認のためのものなので消して構いません
 
+.. note:: ``assert False`` で始める儀式
+
+    拙ブログより `assert Falseで始める儀式 <https://nikkie-ftnext.hatenablog.com/entry/stapy-88-yattom-san-talk-pytest#assert-False%E3%81%A7%E5%A7%8B%E3%82%81%E3%82%8B%E5%84%80%E5%BC%8F>`__
+
+    最初はpytestの導入でつまづくこともあったので、新しいプロジェクトでこの儀式をしてました
+
 FizzBuzzのテストコードを書いてみよう
 ========================================
 
@@ -172,7 +219,7 @@ FizzBuzzのテストコードを書いてみよう
             case _, 0: return "Buzz"
             case _, _: return str(number)
 
-https://gihyo.jp/news/report/01/pyconjp2021/0002#sec1
+ref: `Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カンファレンスレポート) <https://gihyo.jp/news/report/01/pyconjp2021/0002#sec1>`__
 
 | :file:`tests/test_core.py` を書いてみよう。
 | 「3の倍数のときはFizzを返す」
@@ -219,15 +266,27 @@ https://gihyo.jp/news/report/01/pyconjp2021/0002#sec1
 
 .. note:: pytestはassert文を拡張（だから出力が変わっている）
 
+    `Assertion Rewriting <https://docs.pytest.org/en/stable/how-to/writing_plugins.html#assertion-rewriting>`__
+
 おすすめの実行方法
 
 * :command:`pytest -vv`
+
+    * ``--verbose``
+    * ``-v`` でも詳しくなるが、 ``-vv`` だと ``assert A == B`` の差分がとても分かりやすい
+
 * :command:`pytest --ff`
-* ケースの指定 ``pytest tests/test_practice.py::test_環境構築の確認``
 
-.. note:: 日本語テストメソッド
+    * ``--failed-first``: 最後に落ちたテストから実行
 
-    https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89
+* ケースの指定 :command:`pytest tests/test_practice.py::test_環境構築の確認`
+* 『テスト駆動Python 第2版』を一読すると、もっと知れます
+
+.. note:: 日本語で書いてる！
+
+    t-wadaさんのエントリの中の `日本語テストメソッド <https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89>`__ より
+
+        日本語でコミュニケーションをとっているプロジェクトの場合、日本語でテストメソッド名を書いても良いのではないかという考え方
 
 3A
 --------------------
@@ -245,8 +304,8 @@ https://gihyo.jp/news/report/01/pyconjp2021/0002#sec1
         expected = "Fizz"
         assert actual == expected
 
-:actual: テスト対象を実行した値
-:expected: 期待結果
+:actual value: テスト対象を実行した値
+:expected value: 期待結果
 
 3A、すなわち3つのA
 
@@ -286,15 +345,31 @@ https://xp123.com/articles/3a-arrange-act-assert/
 * 15の倍数のとき
 * 3の倍数でも5の倍数でもないとき
 
-.. note:: assertの一覧
+.. note:: ``assert`` の一覧
 
-    TODO actualを使った表を書こう
+    .. list-table:: ``assert`` の形式（参考：『テスト駆動Python 第2版』表2-1）
+
+        * - 検証したいこと
+          - 書き方
+        * - ``actual`` と ``expected`` が等しい
+          - ``assert actual == expected``
+        * - ``actual`` の期待値は ``True``
+          - ``assert actual``
+        * - ``actual`` の期待値は ``False``
+            - ``assert not actual``
+    
+    ``assert actual is False`` より ``assert not actual`` の方がエラーメッセージが分かりやすくなります
 
 .. note:: クラスを使ってテストケースを構造化できる
 
     TDDパートを参照
 
 .. note:: pytest-watch
+
+    テストを書いて毎回 :command:`pytest` している。
+
+    | ファイルに変更があったら自動でpytestが流れるようにするライブラリがある。
+    | https://pypi.org/project/pytest-watch/
 
     :command:`ptw -- -vv --ff`
 
@@ -323,9 +398,19 @@ pytestの機能
         assert fizzbuzz(6) == "Fizz"
         assert fizzbuzz(9) == "Fizz"
 
+1つのテストメソッドは、1つのことを検証しよう
+
+* 3のとき
+* 6のとき
+* 9のとき
+
+それぞれ分けたい
+
 .. note:: アサーションルーレット（アンチパターン）
 
-    https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88Assertion-Roulette
+    t-wadaさんのエントリの中の `[ポイント] アサーションルーレット（Assertion Roulette） <https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88Assertion-Roulette>`__ より
+
+        このテストが失敗したときに、どのアサーションが失敗したのかがわかりにくいのです。
 
 では、個別にテストの関数を書くのか？
 
@@ -341,11 +426,12 @@ pytestの機能
 
 **パラメタ化テスト**
 
-https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E5%8C%96%E3%83%86%E3%82%B9%E3%83%88Parameterized-Test
+t-wadaさんエントリ `[ポイント] パラメータ化テスト（Parameterized Test） <https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E5%8C%96%E3%83%86%E3%82%B9%E3%83%88Parameterized-Test>`__ より
 
     ほぼ同じテスト内容でデータだけを変えたテストメソッドを（列挙であれループであれ）書いているときに、テストメソッドにパラメータを渡せればいいのに、と感じることがあると思います。
 
-pytestにおいては、テストケースの関数を ``@pytest.mark.parametrize`` でデコレートする
+| pytestにおいては、テストケースの関数を ``@pytest.mark.parametrize`` でデコレートする
+| `@pytest.mark.parametrize: parametrizing test functions <https://docs.pytest.org/en/stable/how-to/parametrize.html#pytest-mark-parametrize-parametrizing-test-functions>`__
 
 .. code-block:: python
     :caption: tests/test_core.py
@@ -359,7 +445,12 @@ pytestにおいては、テストケースの関数を ``@pytest.mark.parametriz
     def test_3の倍数のときはFizzを返す(number):
         assert fizzbuzz(number) == "Fizz"
 
-最初から狙ってやるものではなく、「パラメタ化できそう」と気づいたら適用するもの
+| 最初から狙ってやるものではなく、「パラメタ化できそう」と気づいたら適用するもの
+| 参考：「*テストケースがない時に dataProvider から書かない*」（`拙ブログ <https://nikkie-ftnext.hatenablog.com/entry/phpcon-2022-unit-testing-for-beginners-log#2-%E6%98%8E%E6%97%A5%E3%81%8B%E3%82%89%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%B7%B5%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E7%9F%A5%E8%AD%98%E3%82%92%E5%BE%97%E3%82%8B-%E3%82%88%E3%82%8A>`__）
+
+.. note:: parametrizeは積める
+
+    拙ブログ `💡2️⃣ デコレータを複数積める（自動で組合せてくれる！） <https://nikkie-ftnext.hatenablog.com/entry/pytest-parametrize-tips-decorate-class-and-stack-multiple#2%EF%B8%8F%E2%83%A3-%E3%83%87%E3%82%B3%E3%83%AC%E3%83%BC%E3%82%BF%E3%82%92%E8%A4%87%E6%95%B0%E7%A9%8D%E3%82%81%E3%82%8B%E8%87%AA%E5%8B%95%E3%81%A7%E7%B5%84%E5%90%88%E3%81%9B%E3%81%A6%E3%81%8F%E3%82%8C%E3%82%8B>`__
 
 pytestのフィクスチャを使う
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,25 +496,31 @@ capsysはpytestのビルトインのフィクスチャの1つ
 
 .. note:: pytestのtmp_pathフィクスチャ
 
-    標準出力ではなくFizzBuzzをファイルに書き込む場合は、tmp_pathフィクスチャを使うとテストできる
+    | 一時ディレクトリや一時ファイルを作ってくれる。
+    | 標準出力ではなくFizzBuzzをファイルに書き込む場合は、tmp_pathフィクスチャを使ってテストできる
+
+    `The tmp_path fixture (How to use temporary directories and files in tests) <https://docs.pytest.org/en/stable/how-to/tmp_path.html#the-tmp-path-fixture>`__
 
 .. note:: capsysやtmp_pathは本当に必要ですか？（発表者の考え）
 
-    前提：テストサイズ
+    テストにもいろいろ
 
     * 単体 unit
-    * 統合 integration
+    * 結合 integration
 
-    pytestは **幅広いテストサイズをカバー** しているように思われる
+    pytestは **幅広くテストをカバー** しているように思われる（単体も結合もどちらも書ける）
 
     | capsysフィクスチャを使えばテストを書けるが、私は ``print_fizzbuzz`` 関数のテストは書かなくてもよいと考える。
-    | ただし、 **``fizzbuzz`` 関数は徹底的にテスト** してある前提で。
+    | ただし、 **fizzbuzz関数は徹底的にテスト** してある前提で。
     | なぜなら、 ``print_fizzbuzz`` 関数は ``fizzbuzz`` 関数の出力を ``print`` するだけだから。
 
-    「*テストする必要がないほど質素なコードにして、コードに恥をかかせる*」（拙ブログより「`printはテストしないという考え方 <https://nikkie-ftnext.hatenablog.com/entry/pycon-apac-2023-practice-test-talk-extra-test-topics-commentary#print%E3%81%AF%E3%83%86%E3%82%B9%E3%83%88%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%86%E8%80%83%E3%81%88%E6%96%B9>`__」）
+    「*テストする必要がないほど質素なコードにして、コードに恥をかかせる*」（拙ブログより「 `printはテストしないという考え方 <https://nikkie-ftnext.hatenablog.com/entry/pycon-apac-2023-practice-test-talk-extra-test-topics-commentary#print%E3%81%AF%E3%83%86%E3%82%B9%E3%83%88%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%86%E8%80%83%E3%81%88%E6%96%B9>`__ 」）
 
     | また、設計の観点から入出力と計算処理は分離したほうが、変更が容易になる（拙ブログ「` ソフトウェアを作りたかった私へ：入出力と計算を分ける <https://nikkie-ftnext.hatenablog.com/entry/sharply-distinguish-io-from-calculation>`__」）。
     | **計算処理を徹底的にテスト** し、入出力はテストする必要がないほど質素なコードにする。
+
+    | 参考：単体・結合の分け方以外に
+    | Googleによる `Test Sizes <https://testing.googleblog.com/2010/12/test-sizes.html>`__
 
 モック
 ^^^^^^^^^^^^^^^^^^^^
@@ -432,7 +529,7 @@ capsysはpytestのビルトインのフィクスチャの1つ
 
 たとえば、出力が変わる関数
 
-.. literalinclude:: ../../start/src/fizzbuzz/lottery.py
+.. literalinclude:: ../../goal/src/fizzbuzz/lottery.py
     :language: python
 
 .. note:: モックの使い所
@@ -482,7 +579,19 @@ capsysはpytestのビルトインのフィクスチャの1つ
 
 自作の関数を ``monkeypatch.setattr()`` したのと同様のことを少ないコードで実現できている
 
-ref: `patch デコレータ（unittest.mock --- 入門） <https://docs.python.org/ja/3/library/unittest.mock-examples.html#patch-decorators>`
+ref: `patch デコレータ（unittest.mock --- 入門） <https://docs.python.org/ja/3/library/unittest.mock-examples.html#patch-decorators>`__
+
+.. note:: Test Doubles
+
+    http://xunitpatterns.com/Test%20Double.html
+
+    * 広義のモック
+    * テストにおける代役（代役にもいろいろある）
+
+        * スタブ：（HTTP通信などが）実際に動かないようにする代役
+        * 狭義のモック：呼び出す処理を実際に動かないようにする + モックを期待通り使っているかassert
+
+    拙ブログ `PHPUnitのドキュメントを機にxUnit Test Patternsのサイトを確認し、Test Double・Stub・Mockを整理 〜広義のモックと狭義のモック〜 <https://nikkie-ftnext.hatenablog.com/entry/phpunit-docs-test-doubles-refer-xunit-test-patterns>`__
 
 .. note:: pytestのフィクスチャの使いこなし
 
@@ -525,4 +634,6 @@ ref: `patch デコレータ（unittest.mock --- 入門） <https://docs.python.o
 「（本ワークショップで）体験する概念」の1と2をカバーしました
 
 * テスティングフレームワークpytestを使って、テストコードを書いた
-* ここで書いたのは開発者のためのテスト（品質保証のためのテストではない）
+* ここで書いたのは開発者のためのテスト
+
+2点目の参考：拙ブログ `誰のためのテスト？ <https://nikkie-ftnext.hatenablog.com/entry/gihyo-jp-twada-tdd-lecture-articles-lecture-part#%E8%AA%B0%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%86%E3%82%B9%E3%83%88>`__
