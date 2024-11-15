@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
+from fizzbuzz import print_fizzbuzz
 from fizzbuzz.core import fizzbuzz
 from fizzbuzz.lottery import draw_lottery
 
@@ -10,6 +11,29 @@ from fizzbuzz.lottery import draw_lottery
 @pytest.mark.parametrize("number", [3, 6])
 def test_3の倍数のときはFizzを返す(number):
     assert fizzbuzz(number) == "Fizz"
+
+
+def test_15までのfizzbuzz(capsys):
+    print_fizzbuzz(15)
+
+    expected = """\
+1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz
+"""
+    assert capsys.readouterr().out == expected
 
 
 class Test_モックの例:
