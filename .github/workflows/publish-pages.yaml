@@ -1,0 +1,22 @@
+name: Publish on GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - name: Build document
+        run: |
+          make doc
+          rm -r docs/build/html/_sources
+      - name: Publish on GitHub Pages
+        uses: ftnext/action-push-ghpages@v1.0.0
+        with:
+          build_dir: docs/build/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
