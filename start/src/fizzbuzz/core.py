@@ -1,2 +1,2 @@
-def fizzbuzz(number: int) -> str:
+def fizzbuzz(n: int) -> str:
     raise NotImplementedError
