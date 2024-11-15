@@ -3,15 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-pytest TDD workshop documentation
-=================================
+pytestを使ったテスト駆動開発を体験してみよう
+==================================================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+https://tokai.pycon.jp/2024/#event-workshop-2
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: お品書き：
 
+   preparation.rst
+   introduction.rst
+   pytest-first-time.rst
+   tdd-first-time.rst
