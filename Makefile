@@ -13,6 +13,7 @@ init:
       -v '' \
       -l ja \
       --sep \
+      --no-makefile \
       --no-batchfile \
       --ext-githubpages \
 	--extensions sphinx_copybutton \
