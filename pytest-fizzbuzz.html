@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FizzBuzzのテストコードを書いてみよう" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="pytest-fizzbuzz.html" />
+<meta property="og:site_name" content="pytest TDD workshop" />
+<meta property="og:description" content="たっぷり練習しましょう。, 「私テストコード書けるんじゃない！？」とぜひ思ってください, なお、完成版は goal の下にあります src/fizzbuzz/core.py, ref: Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カンファレンスレポート) tests/test_core.py を書いてみよう。,..." />
+<meta name="description" content="たっぷり練習しましょう。, 「私テストコード書けるんじゃない！？」とぜひ思ってください, なお、完成版は goal の下にあります src/fizzbuzz/core.py, ref: Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カンファレンスレポート) tests/test_core.py を書いてみよう。,..." />
+
+    <title>FizzBuzzのテストコードを書いてみよう &#8212; pytest TDD workshop  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=e39c5761" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <script src="_static/documentation_options.js?v=c033477b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="テスト駆動開発の世界をのぞいてみよう" href="tdd-first-time.html" />
+    <link rel="prev" title="入門 テストコード" href="pytest-first-time.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="fizzbuzz">
+<h1>FizzBuzzのテストコードを書いてみよう<a class="headerlink" href="#fizzbuzz" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">たっぷり練習しましょう。</div>
+<div class="line">「私テストコード書けるんじゃない！？」とぜひ思ってください</div>
+</div>
+<p>なお、完成版は <code class="file docutils literal notranslate"><span class="pre">goal</span></code> の下にあります</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">match</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">3</span><span class="p">,</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="s2">&quot;FizzBuzz&quot;</span>
+        <span class="k">case</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span> <span class="k">_</span><span class="p">:</span> <span class="k">return</span> <span class="s2">&quot;Fizz&quot;</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="s2">&quot;Buzz&quot;</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>ref: <a class="reference external" href="https://gihyo.jp/news/report/01/pyconjp2021/0002#sec1" rel="noopener noreferrer" target="_blank">Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カンファレンスレポート)</a></p>
+<div class="line-block">
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">tests/test_core.py</span></code> を書いてみよう。</div>
+<div class="line">「3の倍数のときはFizzを返す」</div>
+</div>
+<p>まずはテストの関数を書く</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="c1"># 後述</span>
+</pre></div>
+</div>
+</div>
+<ul>
+<li><p>3の倍数を渡して <code class="docutils literal notranslate"><span class="pre">fizzbuzz</span></code> 関数を呼び出す</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>3の倍数としてなにか1つ値を選ぶ（例 <code class="docutils literal notranslate"><span class="pre">3</span></code>）</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>返り値は <code class="docutils literal notranslate"><span class="pre">Fizz</span></code> になるはず</p></li>
+</ul>
+<p>呼び出すところまで書いてみる</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fizzbuzz.core</span> <span class="kn">import</span> <span class="n">fizzbuzz</span>
+
+<span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>「返り値は <code class="docutils literal notranslate"><span class="pre">Fizz</span></code> になるはず」、<code class="docutils literal notranslate"><span class="pre">assert</span></code> の出番！</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fizzbuzz.core</span> <span class="kn">import</span> <span class="n">fizzbuzz</span>
+
+<span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>テストが書けました！！</p>
+<p>テストを実行すると、（<code class="docutils literal notranslate"><span class="pre">fizzbuzz</span></code> 関数は完成しているので）通ります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">fizzbuzz</span></code> 関数を壊すと、テストは落ちます（壊したことに気づける！）</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>pytestはassert文を拡張（だから出力が変わっている）</p>
+<p><a class="reference external" href="https://docs.pytest.org/en/stable/how-to/writing_plugins.html#assertion-rewriting" rel="noopener noreferrer" target="_blank">Assertion Rewriting</a></p>
+</div>
+<p>おすすめの実行方法</p>
+<ul>
+<li><p><strong class="command">pytest -vv</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> でも詳しくなるが、 <code class="docutils literal notranslate"><span class="pre">-vv</span></code> だと <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">A</span> <span class="pre">==</span> <span class="pre">B</span></code> の差分がとても分かりやすい</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong class="command">pytest --ff</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--failed-first</span></code>: 最後に落ちたテストから実行</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>ケースの指定 <strong class="command">pytest tests/test_practice.py::test_環境構築の確認</strong></p></li>
+<li><p>『<a class="reference external" href="https://www.shoeisha.co.jp/book/detail/9784798177458" rel="noopener noreferrer" target="_blank">テスト駆動Python 第2版</a>』を一読すると、もっと知れます</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>日本語で書いてる！</p>
+<p>t-wadaさんのエントリの中の <a class="reference external" href="https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89" rel="noopener noreferrer" target="_blank">日本語テストメソッド</a> より</p>
+<blockquote>
+<div><p>日本語でコミュニケーションをとっているプロジェクトの場合、日本語でテストメソッド名を書いても良いのではないかという考え方</p>
+</div></blockquote>
+</div>
+<section id="a">
+<h2>3A<a class="headerlink" href="#a" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">あえて回りくどく書いてみる</div>
+<div class="line">「テスト対象を実行した値は、期待結果と一致する」</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Fizz&quot;</span>
+    <span class="k">assert</span> <span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span>
+</pre></div>
+</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">actual value<span class="colon">:</span></dt>
+<dd class="field-odd"><p>テスト対象を実行した値</p>
+</dd>
+<dt class="field-even">expected value<span class="colon">:</span></dt>
+<dd class="field-even"><p>期待結果</p>
+</dd>
+</dl>
+<p>3A、すなわち3つのA</p>
+<p><a class="reference external" href="https://xp123.com/articles/3a-arrange-act-assert/" rel="noopener noreferrer" target="_blank">https://xp123.com/articles/3a-arrange-act-assert/</a></p>
+<ul class="simple">
+<li><p>Arrange 準備</p></li>
+<li><p>Act 実行</p></li>
+<li><p>Assert 検証</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="c1"># Arrange: テストの準備（データの用意など）</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="c1"># Act: テスト対象の関数を実行</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="c1"># Assert: 実行結果が期待値と等しいかを検証</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Fizz&quot;</span>
+    <span class="k">assert</span> <span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span>
+</pre></div>
+</div>
+</div>
+<p>先のテスト（<code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">fizzbuzz(3)</span> <span class="pre">==</span> <span class="pre">&quot;Fizz&quot;</span></code>）は</p>
+<ol class="arabic simple">
+<li><p>Arrange と Act を書いた（<code class="docutils literal notranslate"><span class="pre">fizzbuzz(3)</span></code>）</p></li>
+<li><p>Assert を書いた</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>テストはAssertから書く</p>
+<p>個人的にはどこから書いてもよいと思っている。
+Assertから書くと「Actが必要だ」「Arrangeが必要だ」と詰まらずに書きやすい印象があるので、初めての方は試してみてもいいかも</p>
+</div>
+<p>なにか1つ、テストを書いてみましょう</p>
+<ul class="simple">
+<li><p>5の倍数のとき</p></li>
+<li><p>15の倍数のとき</p></li>
+<li><p>3の倍数でも5の倍数でもないとき</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><code class="docutils literal notranslate"><span class="pre">assert</span></code> の一覧</p>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">assert</span></code> の形式（参考：『テスト駆動Python 第2版』表2-1）</span><a class="headerlink" href="#id11" title="Link to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p>検証したいこと</p></td>
+<td><p>書き方</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">actual</span></code> と <code class="docutils literal notranslate"><span class="pre">expected</span></code> が等しい</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">actual</span> <span class="pre">==</span> <span class="pre">expected</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">actual</span></code> の期待値は <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">actual</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">actual</span></code> の期待値は <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">not</span> <span class="pre">actual</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">actual</span> <span class="pre">is</span> <span class="pre">False</span></code> より <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">not</span> <span class="pre">actual</span></code> の方がエラーメッセージが分かりやすくなります</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>クラスを使ってテストケースを構造化できる</p>
+<p>TDDパートを参照</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>pytest-watch</p>
+<p>テストを書いて毎回 <strong class="command">pytest</strong> している。</p>
+<div class="line-block">
+<div class="line">ファイルに変更があったら自動でpytestが流れるようにするライブラリがある。</div>
+<div class="line"><a class="reference external" href="https://pypi.org/project/pytest-watch/" rel="noopener noreferrer" target="_blank">https://pypi.org/project/pytest-watch/</a></div>
+</div>
+<p><strong class="command">ptw -- -vv --ff</strong></p>
+</div>
+</section>
+<section id="pytest">
+<h2>pytestはテストコードを書くのをサポートする<a class="headerlink" href="#pytest" title="Link to this heading">¶</a></h2>
+<p>テストの概念</p>
+<ul class="simple">
+<li><p>パラメタ化テスト</p></li>
+<li><p>モック</p></li>
+</ul>
+<p>pytestの機能</p>
+<ul class="simple">
+<li><p>pytestのフィクスチャ</p></li>
+</ul>
+<section id="id1">
+<h3>パラメタ化テスト<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>🙅‍♂️「3の倍数のテストで、複数の値を実行しちゃえ」</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">よくない例</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>1つのテストメソッドは、1つのことを検証しよう</p>
+<ul class="simple">
+<li><p>3のとき</p></li>
+<li><p>6のとき</p></li>
+<li><p>9のとき</p></li>
+</ul>
+<p>それぞれ分けたい</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>アサーションルーレット（アンチパターン）</p>
+<p>t-wadaさんのエントリの中の <a class="reference external" href="https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88Assertion-Roulette" rel="noopener noreferrer" target="_blank">[ポイント] アサーションルーレット（Assertion Roulette）</a> より</p>
+<blockquote>
+<div><p>このテストが失敗したときに、どのアサーションが失敗したのかがわかりにくいのです。</p>
+</div></blockquote>
+</div>
+<p>では、個別にテストの関数を書くのか？</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">アサーションルーレットをしないためにこうする？</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す_3の場合</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す_6の場合</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p><strong>パラメタ化テスト</strong></p>
+<p>t-wadaさんエントリ <a class="reference external" href="https://t-wada.hatenablog.jp/entry/design-for-testability#%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88-%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E5%8C%96%E3%83%86%E3%82%B9%E3%83%88Parameterized-Test" rel="noopener noreferrer" target="_blank">[ポイント] パラメータ化テスト（Parameterized Test）</a> より</p>
+<blockquote>
+<div><p>ほぼ同じテスト内容でデータだけを変えたテストメソッドを（列挙であれループであれ）書いているときに、テストメソッドにパラメータを渡せればいいのに、と感じることがあると思います。</p>
+</div></blockquote>
+<div class="line-block">
+<div class="line">pytestにおいては、テストケースの関数を <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.parametrize</span></code> でデコレートする</div>
+<div class="line"><a class="reference external" href="https://docs.pytest.org/en/stable/how-to/parametrize.html#pytest-mark-parametrize-parametrizing-test-functions" rel="noopener noreferrer" target="_blank">&#64;pytest.mark.parametrize: parametrizing test functions</a></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id14" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">fizzbuzz.core</span> <span class="kn">import</span> <span class="n">fizzbuzz</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_3の倍数のときはFizzを返す</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="line-block">
+<div class="line">最初から狙ってやるものではなく、「パラメタ化できそう」と気づいたら適用するもの</div>
+<div class="line">参考：「<em>テストケースがない時に dataProvider から書かない</em>」（<a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/phpcon-2022-unit-testing-for-beginners-log#2-%E6%98%8E%E6%97%A5%E3%81%8B%E3%82%89%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%B7%B5%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E7%9F%A5%E8%AD%98%E3%82%92%E5%BE%97%E3%82%8B-%E3%82%88%E3%82%8A" rel="noopener noreferrer" target="_blank">拙ブログ</a>）</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>parametrizeは積める</p>
+<p>拙ブログ <a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/pytest-parametrize-tips-decorate-class-and-stack-multiple#2%EF%B8%8F%E2%83%A3-%E3%83%87%E3%82%B3%E3%83%AC%E3%83%BC%E3%82%BF%E3%82%92%E8%A4%87%E6%95%B0%E7%A9%8D%E3%82%81%E3%82%8B%E8%87%AA%E5%8B%95%E3%81%A7%E7%B5%84%E5%90%88%E3%81%9B%E3%81%A6%E3%81%8F%E3%82%8C%E3%82%8B" rel="noopener noreferrer" target="_blank">💡2️⃣ デコレータを複数積める（自動で組合せてくれる！）</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>parametrizeと日本語</p>
+<p>エスケープされてしまう</p>
+<p><a class="reference external" href="https://qiita.com/gimKondo/items/d7a874a97af1ad93052a" rel="noopener noreferrer" target="_blank">pytestのtest IDにパラメータ由来の日本語を使う方法</a></p>
+<div class="line-block">
+<div class="line">設定値 <code class="docutils literal notranslate"><span class="pre">disable_test_id_escaping_and_forfeit_all_rights_to_community_support</span></code></div>
+<div class="line">ただしこれも限定的（<code class="docutils literal notranslate"><span class="pre">pytest.param</span></code> のidは未サポート）</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>pytestのフィクスチャを使う<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">フィクスチャを知った後の方がモックが説明しやすいため、紹介したときの順番と前後します。</div>
+<div class="line"><strong>pytestの概念</strong> です</div>
+</div>
+<p>例えば、fizzbuzzの出力をテストするとしたら？</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">printする関数のテスト？</span><a class="headerlink" href="#id15" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_fizzbuzz</span><span class="p">(</span><span class="n">upper_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_limit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>pytestは機能を提供している</p>
+<p>capsys (<a class="reference external" href="https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html#accessing-captured-output-from-a-test-function" rel="noopener noreferrer" target="_blank">Accessing captured output from a test function (How to capture stdout/stderr output)</a>)</p>
+<p>capsysはpytestのビルトインのフィクスチャの1つ</p>
+<p>フィクスチャは <strong>テストの関数の引数に書く</strong></p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id16" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_fizzbuzzの出力のテスト</span><span class="p">(</span><span class="n">capsys</span><span class="p">):</span>
+    <span class="c1"># 後述</span>
+</pre></div>
+</div>
+</div>
+<ul>
+<li><p>Actで標準出力を伴う関数を呼び出す</p></li>
+<li><p>Assertにおいて、<code class="docutils literal notranslate"><span class="pre">capsys.readouterr()</span></code> を呼び出す</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>標準出力は <code class="docutils literal notranslate"><span class="pre">capsys.readouterr().out</span></code> （これが <code class="docutils literal notranslate"><span class="pre">actual</span></code>）</p></li>
+<li><p>標準出力が期待値と一致するかを <code class="docutils literal notranslate"><span class="pre">assert</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>PyCon JP 2024より「あなたのアプリケーションをレガシーコードにしないための実践Pytest入門」</p>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://speakerdeck.com/mhrtech/pyconjp2024-pytest" rel="noopener noreferrer" target="_blank">https://speakerdeck.com/mhrtech/pyconjp2024-pytest</a></div>
+<div class="line">pytestのフィクスチャ辞典</div>
+</div>
+<p>（ただし、テスト駆動開発については、こちらの発表内容は誤解が見受けられるので注意（後述））</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>pytestのtmp_pathフィクスチャ</p>
+<div class="line-block">
+<div class="line">一時ディレクトリや一時ファイルを作ってくれる。</div>
+<div class="line">標準出力ではなくFizzBuzzをファイルに書き込む場合は、tmp_pathフィクスチャを使ってテストできる</div>
+</div>
+<p><a class="reference external" href="https://docs.pytest.org/en/stable/how-to/tmp_path.html#the-tmp-path-fixture" rel="noopener noreferrer" target="_blank">The tmp_path fixture (How to use temporary directories and files in tests)</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>capsysやtmp_pathは本当に必要ですか？（発表者の考え）</p>
+<p>テストにもいろいろ</p>
+<ul class="simple">
+<li><p>単体 unit</p></li>
+<li><p>結合 integration</p></li>
+</ul>
+<p>pytestは <strong>幅広くテストをカバー</strong> しているように思われる（単体も結合もどちらも書ける）</p>
+<div class="line-block">
+<div class="line">capsysフィクスチャを使えばテストを書けるが、私は <code class="docutils literal notranslate"><span class="pre">print_fizzbuzz</span></code> 関数のテストは書かなくてもよいと考える。</div>
+<div class="line">ただし、 <strong>fizzbuzz関数は徹底的にテスト</strong> してある前提で。</div>
+<div class="line">なぜなら、 <code class="docutils literal notranslate"><span class="pre">print_fizzbuzz</span></code> 関数は <code class="docutils literal notranslate"><span class="pre">fizzbuzz</span></code> 関数の出力を <code class="docutils literal notranslate"><span class="pre">print</span></code> するだけだから。</div>
+</div>
+<p>「<em>テストする必要がないほど質素なコードにして、コードに恥をかかせる</em>」（拙ブログより「 <a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/pycon-apac-2023-practice-test-talk-extra-test-topics-commentary#print%E3%81%AF%E3%83%86%E3%82%B9%E3%83%88%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%86%E8%80%83%E3%81%88%E6%96%B9" rel="noopener noreferrer" target="_blank">printはテストしないという考え方</a> 」）</p>
+<div class="line-block">
+<div class="line">また、設計の観点から入出力と計算処理は分離したほうが、変更が容易になる（拙ブログ「` ソフトウェアを作りたかった私へ：入出力と計算を分ける &lt;<a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/sharply-distinguish-io-from-calculation" rel="noopener noreferrer" target="_blank">https://nikkie-ftnext.hatenablog.com/entry/sharply-distinguish-io-from-calculation</a>&gt;`__」）。</div>
+<div class="line"><strong>計算処理を徹底的にテスト</strong> し、入出力はテストする必要がないほど質素なコードにする。</div>
+</div>
+<div class="line-block">
+<div class="line">参考：単体・結合の分け方以外に</div>
+<div class="line">Googleによる <a class="reference external" href="https://testing.googleblog.com/2010/12/test-sizes.html" rel="noopener noreferrer" target="_blank">Test Sizes</a></div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>モック<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>モックとは、ニセモノ</p>
+<p>たとえば、出力が変わる関数</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+
+
+<span class="k">def</span> <span class="nf">draw_lottery</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;超吉&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;凶&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>モックの使い所</p>
+<ul class="simple">
+<li><p>時間のかかる処理のテストを書く</p></li>
+<li><p>外部と通信する処理のテストを書く</p></li>
+</ul>
+</div>
+<p>出力が変わると困るので、テストにおいては <code class="docutils literal notranslate"><span class="pre">random.randint()</span></code> をニセモノに置き換える</p>
+<ol class="arabic simple">
+<li><p>pytestのmonkeypatchフィクスチャを使った例</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_6の目が出たら超吉と返す</span><span class="p">(</span><span class="n">monkeypatch</span><span class="p">):</span>
+    <span class="n">randint_call_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">randint_mock</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">nonlocal</span> <span class="n">randint_call_count</span>
+        <span class="n">randint_call_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">6</span>
+
+    <span class="c1"># randintをニセモノに差し替えて、このテストでは1〜6のうち絶対6が出るものとする</span>
+    <span class="n">monkeypatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">random</span><span class="p">,</span> <span class="s2">&quot;randint&quot;</span><span class="p">,</span> <span class="n">randint_mock</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">draw_lottery</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;超吉&quot;</span>
+    <span class="k">assert</span> <span class="n">randint_call_count</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>絶対6を返すニセモノの関数 <code class="docutils literal notranslate"><span class="pre">randint_mock</span></code> を定義した</p></li>
+<li><p>このテストにおいては、monkeypatchを使って <code class="docutils literal notranslate"><span class="pre">random.randint</span></code> を <code class="docutils literal notranslate"><span class="pre">randint_mock</span></code> に置き換えた</p></li>
+</ul>
+<p><a class="reference external" href="https://docs.pytest.org/en/stable/how-to/monkeypatch.html" rel="noopener noreferrer" target="_blank">How to monkeypatch/mock modules and environments</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">draw_lottery</span></code> のテストは、6の目が出たときの出力の検証に絞れる</p></li>
+<li><p>実装の中で <code class="docutils literal notranslate"><span class="pre">random.randint()</span></code> を呼び出しているかも合わせて検証</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>nonlocal</p>
+<p>Python チュートリアル <a class="reference external" href="https://docs.python.org/ja/3/tutorial/classes.html#python-scopes-and-namespaces" rel="noopener noreferrer" target="_blank">9.2. Python のスコープと名前空間</a></p>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><code class="docutils literal notranslate"><span class="pre">unittest.mock.patch</span></code> を使った例</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;random.randint&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_6以外の目が出たら凶と返す</span><span class="p">(</span><span class="n">mock_randint</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">draw_lottery</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;凶&quot;</span>
+    <span class="n">mock_randint</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">unittest.mock.patch</span></code> を使って <code class="docutils literal notranslate"><span class="pre">random.randint</span></code> を <code class="docutils literal notranslate"><span class="pre">mock_randint</span></code> に置き換えた</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">mock_randint</span></code> は <code class="docutils literal notranslate"><span class="pre">unittest.mock.MagicMock</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/glossary.html#term-magic-method" rel="noopener noreferrer" target="_blank">マジックメソッド</a> を実装している</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__call__()</span></code> もある</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mock_randint()</span></code> と呼び出されたときの返り値を設定</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">return_value=5</span></code> （呼び出されたら常に5）</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MagicMock</span></code> は呼び出され方を記録している</p></li>
+</ul>
+<p>自作の関数を <code class="docutils literal notranslate"><span class="pre">monkeypatch.setattr()</span></code> したのと同様のことを少ないコードで実現できている</p>
+<p>ref: <a class="reference external" href="https://docs.python.org/ja/3/library/unittest.mock-examples.html#patch-decorators" rel="noopener noreferrer" target="_blank">patch デコレータ（unittest.mock --- 入門）</a></p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>特殊メソッド <code class="docutils literal notranslate"><span class="pre">__call__()</span></code></p>
+<p><a class="reference external" href="https://docs.python.org/ja/3/reference/datamodel.html#class-instances" rel="noopener noreferrer" target="_blank">https://docs.python.org/ja/3/reference/datamodel.html#class-instances</a></p>
+<blockquote>
+<div><p>任意のクラスのインスタンスは、クラスで <code class="docutils literal notranslate"><span class="pre">__call__()</span></code> メソッドを定義することで呼び出し可能になります。</p>
+</div></blockquote>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>PyCon JP 2020より「unittest.mockを使って単体テストを書こう 〜より効率的で安定したテストに〜 」</p>
+<p><a class="reference external" href="https://pycon.jp/2020/timetable/?id=203572" rel="noopener noreferrer" target="_blank">https://pycon.jp/2020/timetable/?id=203572</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Test Doubles</p>
+<p><a class="reference external" href="http://xunitpatterns.com/Test%20Double.html" rel="noopener noreferrer" target="_blank">http://xunitpatterns.com/Test%20Double.html</a></p>
+<ul>
+<li><p>広義のモック</p></li>
+<li><p>テストにおける代役（代役にもいろいろある）</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>スタブ：（HTTP通信などが）実際に動かないようにする代役</p></li>
+<li><p>狭義のモック：呼び出す処理を実際に動かないようにする + モックを期待通り使っているかassert</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>拙ブログ <a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/phpunit-docs-test-doubles-refer-xunit-test-patterns" rel="noopener noreferrer" target="_blank">PHPUnitのドキュメントを機にxUnit Test Patternsのサイトを確認し、Test Double・Stub・Mockを整理 〜広義のモックと狭義のモック〜</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>pytestのフィクスチャの使いこなし</p>
+<p>(1)のケースのリファクタリング</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">always_6_randint</span><span class="p">(</span><span class="n">monkeypatch</span><span class="p">):</span>
+    <span class="n">randint_call_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">randint_mock</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">nonlocal</span> <span class="n">randint_call_count</span>
+        <span class="n">randint_call_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">6</span>
+
+    <span class="n">monkeypatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">random</span><span class="p">,</span> <span class="s2">&quot;randint&quot;</span><span class="p">,</span> <span class="n">randint_mock</span><span class="p">)</span>
+
+    <span class="k">yield</span>
+
+    <span class="k">assert</span> <span class="n">randint_call_count</span> <span class="o">==</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">test_6の目が出たら超吉と返す_リファクタ版</span><span class="p">(</span><span class="n">always_6_randint</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">draw_lottery</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;超吉&quot;</span>
+</pre></div>
+</div>
+<ul>
+<li><p>monkeypatchを使った自作のフィクスチャを定義</p></li>
+<li><p>「6の目が出たら超吉と返す」は自作のフィクスチャを指定して実装</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>「6の目が出たら超吉と返す」ではmonkeypatchを指定していないが、自作のフィクスチャが指定しているので、これでmonkeypatchを含めて動く</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>自分で書いたフィクスチャによって、Arrangeをスッキリさせられる</p>
+<p><strong class="command">pytest --setup-show</strong> でフィクスチャのsetup順が確認できる</p>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>小まとめ<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>「（本ワークショップで）体験する概念」の1と2をカバーしました</p>
+<ul class="simple">
+<li><p>テスティングフレームワークpytestを使って、テストコードを書いた</p></li>
+<li><p>ここで書いたのは開発者のためのテスト</p></li>
+</ul>
+<p>2点目の参考：拙ブログ <a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/gihyo-jp-twada-tdd-lecture-articles-lecture-part#%E8%AA%B0%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%86%E3%82%B9%E3%83%88" rel="noopener noreferrer" target="_blank">誰のためのテスト？</a></p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pytest TDD workshop</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>ナビゲーション</h3>
+<p class="caption" role="heading"><span class="caption-text">お品書き：</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">はじめに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest-first-time.html">入門 テストコード</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FizzBuzzのテストコードを書いてみよう</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a">3A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pytest">pytestはテストコードを書くのをサポートする</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">小まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tdd-first-time.html">テスト駆動開発の世界をのぞいてみよう</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tdd-first-time.html#id8">まとめ：体験したもの</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tdd-first-time.html#next">Next: 達人のテスト駆動開発は実は単位が小さい</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pytest-first-time.html" title="前の章へ">入門 テストコード</a></li>
+      <li>Next: <a href="tdd-first-time.html" title="次の章へ">テスト駆動開発の世界をのぞいてみよう</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, nikkie.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/pytest-fizzbuzz.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

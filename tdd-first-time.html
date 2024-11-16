@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="テスト駆動開発の世界をのぞいてみよう" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="tdd-first-time.html" />
+<meta property="og:site_name" content="pytest TDD workshop" />
+<meta property="og:description" content="（IMO）TDDは、環境構築の確認でやったことをもっと徹底的にやる 環境構築できていれば assert False で落ちる, assert True に変えればテストは全部通る. それにより、終始 コントロールしている感覚 テスト駆動開発: Test Driven Development（テストが開発を駆動する） 提案はKent Beck。『 テスト駆動開発 』, t-wadaさん 【翻訳..." />
+<meta name="description" content="（IMO）TDDは、環境構築の確認でやったことをもっと徹底的にやる 環境構築できていれば assert False で落ちる, assert True に変えればテストは全部通る. それにより、終始 コントロールしている感覚 テスト駆動開発: Test Driven Development（テストが開発を駆動する） 提案はKent Beck。『 テスト駆動開発 』, t-wadaさん 【翻訳..." />
+
+    <title>テスト駆動開発の世界をのぞいてみよう &#8212; pytest TDD workshop  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=e39c5761" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <script src="_static/documentation_options.js?v=c033477b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="FizzBuzzのテストコードを書いてみよう" href="pytest-fizzbuzz.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>テスト駆動開発の世界をのぞいてみよう<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>（IMO）TDDは、環境構築の確認でやったことをもっと徹底的にやる</p>
+<ul class="simple">
+<li><p>環境構築できていれば <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">False</span></code> で落ちる</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">True</span></code> に変えればテストは全部通る</p></li>
+</ul>
+<p>それにより、終始 <strong>コントロールしている感覚</strong></p>
+<section id="id2">
+<h2>テスト駆動開発<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>Test Driven Development（テストが開発を駆動する）</p>
+<div class="line-block">
+<div class="line">提案はKent Beck。『<a class="reference external" href="https://www.ohmsha.co.jp/book/9784274217883/" rel="noopener noreferrer" target="_blank">テスト駆動開発</a>』</div>
+<div class="line">t-wadaさん <a class="reference external" href="https://t-wada.hatenablog.jp/entry/canon-tdd-by-kent-beck#%E7%BF%BB%E8%A8%B3%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA%E3%81%AE%E5%AE%9A%E7%BE%A9" rel="noopener noreferrer" target="_blank">【翻訳】テスト駆動開発の定義</a></div>
+</div>
+<p>私の言葉で説明すると</p>
+<ol class="arabic simple">
+<li><p>テストシナリオのリストを書く</p></li>
+<li><p>テストシナリオから <strong>1つだけ</strong> 選び、テストコードを書き、テストが失敗することを確認</p></li>
+<li><p>プロダクトコードを変更し、すべてのテストコードを成功させる</p></li>
+<li><p>テストコードやプロダクトコードをリファクタリング（必要だと思ったらやる）</p></li>
+<li><p>テストリストが空になるまで2に戻って繰り返す</p></li>
+</ol>
+<p><strong>サイクル</strong> ♻️「テストリスト (2) -&gt; Red (2) -&gt; Green (3) -&gt; Refactor (4)」</p>
+<p>Red（先にテストコードを書いて落とす）：テストファースト</p>
+<p>pytestでテストの書き方は皆さん体験したので、ここでは <strong>テストを書く順番・開発を進める流れにご注目</strong> ください</p>
+<p>「動作するきれいなコード」</p>
+<ul class="simple">
+<li><p>まず動作させる（Red -&gt; Green）</p></li>
+<li><p>次に動作したままきれいなコードにする（Green -&gt; Refactor）</p></li>
+</ul>
+<div class="line-block">
+<div class="line">サイクルなので、テストリストを最初に全部テストコードにするわけでは <strong>ない</strong> です。</div>
+<div class="line">1つ選んでテストコードを書き、そのテストが通るように実装し、リファクタリングできるかを考えるというサイクルを何度も何度も（テストリストが空になるまで）回します</div>
+</div>
+</section>
+<section id="fizzbuzz">
+<h2>FizzBuzzを例にテスト駆動開発<a class="headerlink" href="#fizzbuzz" title="Link to this heading">¶</a></h2>
+<p>コミットログ版：<a class="reference external" href="https://github.com/ftnext/first-python-test-2024/commits/main/tdd" rel="noopener noreferrer" target="_blank">https://github.com/ftnext/first-python-test-2024/commits/main/tdd</a></p>
+<p>FizzBuzzの仕様からテストリストを書き出す</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [ ]</span> 数をそのまま文字列に変換する
+<span class="k">- [ ]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="k">- [ ]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+</pre></div>
+</div>
+</div>
+<div class="line-block">
+<div class="line">「数をそのまま文字列に変換する」はそのままではテストコードに落とし込めない。</div>
+<div class="line">数を決める</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [ ]</span> 数をそのまま文字列に変換する
+<span class="w">  </span><span class="k">- [ ]</span> 1を渡すと文字列1を返す
+<span class="k">- [ ]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="k">- [ ]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+</pre></div>
+</div>
+</div>
+<p>1を渡すと文字列1を返す</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_1を渡すと文字列1を返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>実装はまだしていない（呼べるように関数定義だけしておく）</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</pre></div>
+</div>
+</div>
+<p>🟥テストが落ちる (0/1)</p>
+</section>
+<section id="id4">
+<h2>仮実装<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">test_1を渡すと文字列1を返す</span></code> だけを通すことを考える。</p>
+<div class="line-block">
+<div class="line">テストリストが全部通ればFizzBuzzができた状態になる。</div>
+<div class="line">いまは最初のテスト</div>
+<div class="line">FizzBuzzを実装しようとするのではなく、1を渡すときだけ通すことを考える</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>def fizzbuzz(n: int) -&gt; str:
+<span class="gd">-    raise NotImplementedError</span>
+<span class="gi">+    return &quot;1&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>🟩テストが通る (1/1)</p>
+<p>「茶番では？」</p>
+<ul class="simple">
+<li><p>テストを書き間違える可能性がある</p></li>
+<li><p>文字列 <cite>&quot;1&quot;</cite> を返すように実装して、テストがRedのままであれば、テストを間違えていることに気づける</p></li>
+<li><p>文字列 <cite>&quot;1&quot;</cite> を返すように実装して、テストがGreenならば「想定通り。実装もテストコードもコントロールして進めている」</p></li>
+</ul>
+<p>テストコード・実装どちらかにRefactorの余地はあるか？ -&gt; なさそう</p>
+<p>『テスト駆動開発』第2章</p>
+<blockquote>
+<div><p>コードでまずベタ書きの値を使い、</p>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2>三角測量<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>FizzBuzzとしては常に文字列の1を返すのはよくない。
+一般化したい</p>
+<p>一般化するために、テストケースを追加する</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id14" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [ ]</span> 数をそのまま文字列に変換する
+<span class="w">  </span><span class="k">- [x]</span> 1を渡すと文字列1を返す
+<span class="w">  </span><span class="k">- [ ]</span> 2を渡すと文字列2を返す
+<span class="k">- [ ]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="k">- [ ]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+</pre></div>
+</div>
+</div>
+<p>2を渡すと文字列2を返す</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id15" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_2を渡すと文字列2を返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;2&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>🟥テストが落ちる (1/2)</p>
+<p>実装する。ここで一般化
+（<code class="docutils literal notranslate"><span class="pre">n</span></code> が <code class="docutils literal notranslate"><span class="pre">1</span></code> のときはと分岐するより、一般化したほうが実装を単純なまま＝きれいに保てる）</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id16" title="Link to this code">¶</a></div>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>def fizzbuzz(n: int) -&gt; str:
+<span class="gd">-    return &quot;1&quot;</span>
+<span class="gi">+    return str(n)</span>
+</pre></div>
+</div>
+</div>
+<p>🟩テストが通る (2/2)</p>
+<p>『テスト駆動開発』第3章より</p>
+<blockquote>
+<div><p>コードを一般化できるのは、2つ以上の実例があるときだけ</p>
+</div></blockquote>
+<p>Refactor：実装の変数をrename。 <code class="docutils literal notranslate"><span class="pre">n</span></code> より <code class="docutils literal notranslate"><span class="pre">number</span></code> の方が読みやすい</p>
+<p>（パラメタ化テストは、私はいったん置いておく）</p>
+</section>
+<section id="id6">
+<h2>明白な実装<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">3の倍数のときは数の代わりに「Fizz」に変換する</div>
+<div class="line">3でテストコードを書く</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id17" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [x]</span> 数をそのまま文字列に変換する
+<span class="w">  </span><span class="k">- [x]</span> 1を渡すと文字列1を返す
+<span class="w">  </span><span class="k">- [x]</span> 2を渡すと文字列2を返す
+<span class="k">- [ ]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="w">  </span><span class="k">- [ ]</span> 3を渡すと文字列Fizzを返す
+<span class="k">- [ ]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id18" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_3を渡すと文字列Fizzを返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Fizz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>🟥テストが落ちる (2/3)</p>
+<div class="line-block">
+<div class="line">テストにも実装にも自信を持ち始めたので、三角測量せずに直接実装（<strong>明白な実装</strong>）。</div>
+<div class="line">TDDはやっているときの自信度合いに応じて進む歩幅を変えられる</div>
+<div class="line">参考：拙ブログ <a class="reference external" href="https://nikkie-ftnext.hatenablog.com/entry/tddbc-2020-online-archive-twada-keynote-live-coding-log" rel="noopener noreferrer" target="_blank">おーい、t-wadaさん、ペアプロしようぜ！TDD Boot Camp 2020 Online #1 基調講演/ライブコーディング 視聴ログ🦁</a></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id19" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Fizz&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>🟩テストが通る (3/3)</p>
+<p>Refactorの余地はなさそう</p>
+<p>『テスト駆動開発』第2章</p>
+<blockquote>
+<div><p>すぐに頭の中の実装をコードに落とす。</p>
+</div></blockquote>
+</section>
+<section id="red-green-refactor">
+<h2>テストリスト -&gt; Red -&gt; Green -&gt; Refactor を回す<a class="headerlink" href="#red-green-refactor" title="Link to this heading">¶</a></h2>
+<p>5の倍数</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id20" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [x]</span> 数をそのまま文字列に変換する
+<span class="w">  </span><span class="k">- [x]</span> 1を渡すと文字列1を返す
+<span class="w">  </span><span class="k">- [x]</span> 2を渡すと文字列2を返す
+<span class="k">- [x]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="w">  </span><span class="k">-</span><span class="w"> </span> [x] 3を渡すと文字列Fizzを返す
+<span class="k">- [ ]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="w">  </span><span class="k">-</span><span class="w"> </span> [ ] 5を渡すと文字列Buzzを返す
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id21" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_5を渡すと文字列Buzzを返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Buzz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>🟥テストが落ちる (3/4)</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id22" title="Link to this code">¶</a></div>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>def fizzbuzz(number: int) -&gt; str:
+<span class="w"> </span>   if number % 3 == 0:
+<span class="w"> </span>       return &quot;Fizz&quot;
+<span class="gi">+    if number % 5 == 0:</span>
+<span class="gi">+        return &quot;Buzz&quot;</span>
+<span class="w"> </span>   return str(number)
+</pre></div>
+</div>
+</div>
+<p>🟩テストが通る (4/4)</p>
+<p>Refactorの余地はなさそう</p>
+<p>15の倍数</p>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">テストリスト</span><a class="headerlink" href="#id23" title="Link to this code">¶</a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">- [x]</span> 数をそのまま文字列に変換する
+<span class="w">  </span><span class="k">- [x]</span> 1を渡すと文字列1を返す
+<span class="w">  </span><span class="k">- [x]</span> 2を渡すと文字列2を返す
+<span class="k">- [x]</span> 3の倍数のときは数の代わりに「Fizz」に変換する
+<span class="w">  </span><span class="k">-</span><span class="w"> </span> [x] 3を渡すと文字列Fizzを返す
+<span class="k">- [x]</span> 5の倍数のときは数の代わりに「Buzz」に変換する
+<span class="w">  </span><span class="k">-</span><span class="w"> </span> [x] 5を渡すと文字列Buzzを返す
+<span class="k">- [ ]</span> 15の倍数のときは数の代わりに「FizzBuzz」に変換する
+<span class="w">  </span><span class="k">-</span><span class="w"> </span> [ ] 15を渡すと文字列FizzBuzzを返す
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id24">
+<div class="code-block-caption"><span class="caption-text">tests/test_core.py</span><a class="headerlink" href="#id24" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_15を渡すと文字列FizzBuzzを返す</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;FizzBuzz&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>🟥テストが落ちる (4/5)</p>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-text">src/fizzbuzz/core.py</span><a class="headerlink" href="#id25" title="Link to this code">¶</a></div>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>def fizzbuzz(number: int) -&gt; str:
+<span class="gi">+    if number % 15 == 0:</span>
+<span class="gi">+        return &quot;FizzBuzz&quot;</span>
+<span class="w"> </span>   if number % 3 == 0:
+<span class="w"> </span>       return &quot;Fizz&quot;
+<span class="w"> </span>   if number % 5 == 0:
+<span class="w"> </span>       return &quot;Buzz&quot;
+<span class="w"> </span>   return str(number)
+</pre></div>
+</div>
+</div>
+<p>🟩テストが通る (5/5)</p>
+<p>Refactor：最初に見たStructural Pattern Matchingに書き換えてみてもよいかも</p>
+<p>テストリストが全部実装できた。FizzBuzz完成！</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>動作する仕様書にできる</p>
+<p>TDDBC（後述）</p>
+<ul class="simple">
+<li><p>クラスを使って構造化する例</p></li>
+<li><p>三角測量に使った例は消してしまう</p></li>
+</ul>
+</div>
+</section>
+<section id="pytest">
+<h2>pytestの機能も使える<a class="headerlink" href="#pytest" title="Link to this heading">¶</a></h2>
+<p>モック</p>
+<ul class="simple">
+<li><p>モックを使うことで、使う部品ができていなくてもテストを書ける（全通し以外の選択肢を持てることが大きい）</p></li>
+<li><p>例：<a class="reference external" href="https://github.com/Uberi/speech_recognition/blob/3.11.0/tests/recognizers/test_google.py" rel="noopener noreferrer" target="_blank">https://github.com/Uberi/speech_recognition/blob/3.11.0/tests/recognizers/test_google.py</a></p></li>
+</ul>
+<p>パラメタ化</p>
+<ul class="simple">
+<li><p>Refactorで適用することが多い</p></li>
+<li><p>次に書きたいテストを書きやすくするためにパラメタ化する</p></li>
+</ul>
+<p>フィクスチャ</p>
+<ul class="simple">
+<li><p>Refactorで、Arrange（やAssert）をスッキリさせるために適用</p></li>
+<li><p>最初に書いたテストコードはフィクスチャたくさんになりがち</p></li>
+<li><p>これをフィクスチャごとに切り出す</p></li>
+<li><p>読めないかもしれないですが：<a class="reference external" href="https://github.com/ftnext/sphinx-new-tab-link/blob/v0.6.1/tests/test_roles.py" rel="noopener noreferrer" target="_blank">https://github.com/ftnext/sphinx-new-tab-link/blob/v0.6.1/tests/test_roles.py</a></p></li>
+</ul>
+</section>
+<section id="id7">
+<h2>この先の学習リソース<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>『<a class="reference external" href="https://www.shoeisha.co.jp/book/detail/9784798177458" rel="noopener noreferrer" target="_blank">テスト駆動Python 第2版</a>』</p></li>
+<li><p>『<a class="reference external" href="https://www.ohmsha.co.jp/book/9784274217883/" rel="noopener noreferrer" target="_blank">テスト駆動開発</a>』</p></li>
+</ul>
+<p>pytestではないが、pytestに置き換えて進めていけるはず</p>
+<ul class="simple">
+<li><p>TDDBC <a class="reference external" href="https://www.youtube.com/watch?v=Q-FJ3XmFlT8&amp;t=1145s" rel="noopener noreferrer" target="_blank">https://www.youtube.com/watch?v=Q-FJ3XmFlT8&amp;t=1145s</a></p></li>
+<li><p>『<a class="reference external" href="https://gihyo.jp/book/2022/978-4-297-13234-7" rel="noopener noreferrer" target="_blank">ちょうぜつソフトウェア設計入門</a>』（ちょうぜつ本）第6章</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h1>まとめ：体験したもの<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h1>
+<ol class="arabic">
+<li><p>自動テスト</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pytest</p></li>
+<li><p>パラメタ化・フィクスチャ・モック</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>開発者テスト</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>参加する前と比べて少しでもテストコードを書けるようになった！（と感じていただけていたら嬉しいです）</p></li>
+<li><p>振る舞いを変えていないかという不安は、テストコードで退屈に変わります</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>テストファースト</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>テスト駆動開発（テストリスト -&gt; Red -&gt; Green -&gt; Refactor）をのぞいてみた</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="next">
+<h1>Next: 達人のテスト駆動開発は実は単位が小さい<a class="headerlink" href="#next" title="Link to this heading">¶</a></h1>
+<p>1サイクル：テストリスト -&gt; Red -&gt; Green -&gt; Refactor</p>
+<p>達人は、テストリスト -&gt; Red -&gt; Green -&gt; Red -&gt; Green -&gt; ... -&gt; Red -&gt; Green -&gt; Refactor</p>
+<div class="line-block">
+<div class="line">1つのテストを通す間に、 <strong>RedとGreenを何度も往復</strong> する。</div>
+<div class="line">私はこのスタイルに近づこうとしてます： <a class="reference external" href="https://ftnext.github.io/small-technical-2023/chapter-tdd.html" rel="noopener noreferrer" target="_blank">小さいテスト駆動開発</a></div>
+</div>
+<p>『<a class="reference external" href="https://asciidwango.jp/post/693992928727760896/clean-craftsmanship" rel="noopener noreferrer" target="_blank">Clean Craftsmanship</a>』</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pytest TDD workshop</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>ナビゲーション</h3>
+<p class="caption" role="heading"><span class="caption-text">お品書き：</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">はじめに</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest-first-time.html">入門 テストコード</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest-fizzbuzz.html">FizzBuzzのテストコードを書いてみよう</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">テスト駆動開発の世界をのぞいてみよう</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">テスト駆動開発</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fizzbuzz">FizzBuzzを例にテスト駆動開発</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">仮実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">三角測量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">明白な実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#red-green-refactor">テストリスト -&gt; Red -&gt; Green -&gt; Refactor を回す</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pytest">pytestの機能も使える</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">この先の学習リソース</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#id8">まとめ：体験したもの</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#next">Next: 達人のテスト駆動開発は実は単位が小さい</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pytest-fizzbuzz.html" title="前の章へ">FizzBuzzのテストコードを書いてみよう</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, nikkie.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/tdd-first-time.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
