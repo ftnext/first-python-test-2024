@@ -294,11 +294,22 @@ Refactor：最初に見たStructural Pattern Matchingに書き換えてみても
 pytestの機能も使える
 ------------------------------
 
-TODO 実際の例から持ってくる？
-
 モック
+
+* モックを使うことで、使う部品ができていなくてもテストを書ける（全通し以外の選択肢を持てることが大きい）
+* 例：https://github.com/Uberi/speech_recognition/blob/3.11.0/tests/recognizers/test_google.py
+
 パラメタ化
+
+* Refactorで適用することが多い
+* 次に書きたいテストを書きやすくするためにパラメタ化する
+
 フィクスチャ
+
+* Refactorで、Arrange（やAssert）をスッキリさせるために適用
+* 最初に書いたテストコードはフィクスチャたくさんになりがち
+* これをフィクスチャごとに切り出す
+* 読めないかもしれないですが：https://github.com/ftnext/sphinx-new-tab-link/blob/v0.6.1/tests/test_roles.py
 
 この先の学習リソース
 ------------------------------
@@ -308,7 +319,31 @@ pytestではないが、pytestに置き換えて進めていけるはず
 * TDDBC https://www.youtube.com/watch?v=Q-FJ3XmFlT8&t=1145s
 * 『`ちょうぜつソフトウェア設計入門 <https://gihyo.jp/book/2022/978-4-297-13234-7>`__』（ちょうぜつ本）第6章
 
+まとめ：体験したもの
+==================================================
+
+1. 自動テスト
+
+    * pytest
+    * パラメタ化・フィクスチャ・モック
+
+2. 開発者テスト
+
+    * 参加する前と比べて少しでもテストコードを書けるようになった！（と感じていただけていたら嬉しいです）
+    * 振る舞いを変えていないかという不安は、テストコードで退屈に変わります
+
+3. テストファースト
+
+    * テスト駆動開発（テストリスト -> Red -> Green -> Refactor）をのぞいてみた
+
 Next: 達人のテスト駆動開発は実は単位が小さい
 ==================================================
 
-まとめ & TODO
+1サイクル：テストリスト -> Red -> Green -> Refactor
+
+達人は、テストリスト -> Red -> Green -> Red -> Green -> ... -> Red -> Green -> Refactor
+
+| 1つのテストを通す間に、 **RedとGreenを何度も往復** する。
+| 私はこのスタイルに近づこうとしてます： `小さいテスト駆動開発 <https://ftnext.github.io/small-technical-2023/chapter-tdd.html>`__
+
+『`Clean Craftsmanship <https://asciidwango.jp/post/693992928727760896/clean-craftsmanship>`__』
