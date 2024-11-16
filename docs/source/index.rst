@@ -3,8 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. _テスト駆動Python 第2版: https://www.shoeisha.co.jp/book/detail/9784798177458
-
 pytestを使ったテスト駆動開発を体験してみよう
 ==================================================
 

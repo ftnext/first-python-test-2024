@@ -77,7 +77,7 @@ ref: `Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カン�
     * ``--failed-first``: 最後に落ちたテストから実行
 
 * ケースの指定 :command:`pytest tests/test_practice.py::test_環境構築の確認`
-* 『`テスト駆動Python 第2版`_』を一読すると、もっと知れます
+* 『`テスト駆動Python 第2版 <https://www.shoeisha.co.jp/book/detail/9784798177458>`__』を一読すると、もっと知れます
 
 .. note:: 日本語で書いてる！
 
