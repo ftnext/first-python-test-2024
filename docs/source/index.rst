@@ -20,4 +20,5 @@ https://tokai.pycon.jp/2024/#event-workshop-2
    preparation.rst
    introduction.rst
    pytest-first-time.rst
+   pytest-fizzbuzz.rst
    tdd-first-time.rst
