@@ -209,6 +209,8 @@ FizzBuzzのテストコードを書いてみよう
 | たっぷり練習しましょう。
 | 「私テストコード書けるんじゃない！？」とぜひ思ってください
 
+なお、完成版は :file:`goal` の下にあります
+
 .. code-block:: python
     :caption: src/fizzbuzz/core.py
 
@@ -356,7 +358,7 @@ https://xp123.com/articles/3a-arrange-act-assert/
         * - ``actual`` の期待値は ``True``
           - ``assert actual``
         * - ``actual`` の期待値は ``False``
-            - ``assert not actual``
+          - ``assert not actual``
     
     ``assert actual is False`` より ``assert not actual`` の方がエラーメッセージが分かりやすくなります
 

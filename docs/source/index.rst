@@ -8,6 +8,9 @@ pytestを使ったテスト駆動開発を体験してみよう
 
 https://tokai.pycon.jp/2024/#event-workshop-2
 
+| テスト駆動開発の入門ワークショップです。
+| FizzBuzzを題材に、pytestでのテストの書き方を知り、テスト駆動開発の様子を体験していただきます。
+
 .. toctree::
    :maxdepth: 2
    :caption: お品書き：
