@@ -1,4 +1,4 @@
-テストコード
+入門 テストコード
 ========================================
 
 テストコードが書けると何がいいのか
@@ -282,7 +282,7 @@ ref: `Day2 Keynote：A Perfect match ―Mr. Brandt Bucher (PyCon JP 2021 カン�
     * ``--failed-first``: 最後に落ちたテストから実行
 
 * ケースの指定 :command:`pytest tests/test_practice.py::test_環境構築の確認`
-* 『テスト駆動Python 第2版』を一読すると、もっと知れます
+* 『`テスト駆動Python 第2版`_』を一読すると、もっと知れます
 
 .. note:: 日本語で書いてる！
 
@@ -454,6 +454,15 @@ t-wadaさんエントリ `[ポイント] パラメータ化テスト（Parameter
 
     拙ブログ `💡2️⃣ デコレータを複数積める（自動で組合せてくれる！） <https://nikkie-ftnext.hatenablog.com/entry/pytest-parametrize-tips-decorate-class-and-stack-multiple#2%EF%B8%8F%E2%83%A3-%E3%83%87%E3%82%B3%E3%83%AC%E3%83%BC%E3%82%BF%E3%82%92%E8%A4%87%E6%95%B0%E7%A9%8D%E3%82%81%E3%82%8B%E8%87%AA%E5%8B%95%E3%81%A7%E7%B5%84%E5%90%88%E3%81%9B%E3%81%A6%E3%81%8F%E3%82%8C%E3%82%8B>`__
 
+.. note:: parametrizeと日本語
+
+    エスケープされてしまう
+
+    `pytestのtest IDにパラメータ由来の日本語を使う方法 <https://qiita.com/gimKondo/items/d7a874a97af1ad93052a>`__
+
+    | 設定値 ``disable_test_id_escaping_and_forfeit_all_rights_to_community_support``
+    | ただしこれも限定的（``pytest.param`` のidは未サポート）
+
 pytestのフィクスチャを使う
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -560,9 +569,17 @@ capsysはpytestのビルトインのフィクスチャの1つ
         assert draw_lottery() == "超吉"
         assert randint_call_count == 1
 
-* 絶対6を返すニセモノの関数を定義して、monkeypatchを使って置き換えた
-* 6が返ったときの出力の検証
-* 実装の中で ``random.randint()`` を呼び出しているかの検証
+* 絶対6を返すニセモノの関数 ``randint_mock`` を定義した
+* このテストにおいては、monkeypatchを使って ``random.randint`` を ``randint_mock`` に置き換えた
+
+`How to monkeypatch/mock modules and environments <https://docs.pytest.org/en/stable/how-to/monkeypatch.html>`__
+
+* ``draw_lottery`` のテストは、6の目が出たときの出力の検証に絞れる
+* 実装の中で ``random.randint()`` を呼び出しているかも合わせて検証
+
+.. note:: nonlocal
+
+    Python チュートリアル `9.2. Python のスコープと名前空間 <https://docs.python.org/ja/3/tutorial/classes.html#python-scopes-and-namespaces>`__
 
 (2) ``unittest.mock.patch`` を使った例
 
@@ -573,15 +590,32 @@ capsysはpytestのビルトインのフィクスチャの1つ
         assert draw_lottery() == "凶"
         mock_randint.assert_called_once_with(1, 6)
 
-* ``unittest.mock.patch`` を使って ``random.randint`` を ``MagicMock`` に置き換えた
+* ``unittest.mock.patch`` を使って ``random.randint`` を ``mock_randint`` に置き換えた
 
-    * この ``MagicMock`` は ``return_value`` によって、呼び出されたら常に ``5`` を返す
+    * ``mock_randint`` は ``unittest.mock.MagicMock``
+
+        * `マジックメソッド <https://docs.python.org/ja/3/glossary.html#term-magic-method>`__ を実装している
+        * ``__call__()`` もある
+
+    * ``mock_randint()`` と呼び出されたときの返り値を設定
+    
+        * ``return_value=5`` （呼び出されたら常に5）
 
 * ``MagicMock`` は呼び出され方を記録している
 
 自作の関数を ``monkeypatch.setattr()`` したのと同様のことを少ないコードで実現できている
 
 ref: `patch デコレータ（unittest.mock --- 入門） <https://docs.python.org/ja/3/library/unittest.mock-examples.html#patch-decorators>`__
+
+.. note:: 特殊メソッド ``__call__()``
+
+    https://docs.python.org/ja/3/reference/datamodel.html#class-instances
+    
+        任意のクラスのインスタンスは、クラスで ``__call__()`` メソッドを定義することで呼び出し可能になります。
+
+.. note:: PyCon JP 2020より「unittest.mockを使って単体テストを書こう 〜より効率的で安定したテストに〜 」
+
+    https://pycon.jp/2020/timetable/?id=203572
 
 .. note:: Test Doubles
 

@@ -25,8 +25,19 @@ Python 3.10以上（`Structural Pattern Matching <https://docs.python.org/ja/3.1
     $ source .venv/bin/activate
     $ python -m pip install -e '.[dev]'
 
-| pytestとプロジェクトをインストールする
-| （プロジェクト、かつ再配布できるようにすると便利です）
+pytestとプロジェクトをインストールする
+
+.. note:: editable install
+
+    | 最初はスクリプトで全然よいのですが、高機能なものを作ろうとするとコード量が増え、1スクリプトだと限界が訪れます。
+    | 複数ファイルを *プロジェクト* として扱う。
+    | プロジェクトを再配布できるようにしています（:file:`pyproject.toml`）
+
+    | 開発中のプロジェクトのインストールは editable install （:command:`pip install -e`）
+    | ソースコードを :file:`site-packages` 下にコピーしません。
+    | editable installしておけば、開発中にコードを変更しても再インストール不要です。
+
+    `Development Mode (a.k.a. “Editable Installs”) <https://setuptools.pypa.io/en/stable/userguide/development_mode.html>`__
 
 選択肢2️⃣ GitHub Codespaces
 ------------------------------

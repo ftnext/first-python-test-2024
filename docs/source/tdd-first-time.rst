@@ -13,7 +13,7 @@
 
 Test Driven Development（テストが開発を駆動する）
 
-| 提案はKent Beck。『`テスト駆動開発 <https://www.ohmsha.co.jp/book/9784274217883/>`__』
+| 提案はKent Beck。『`テスト駆動開発 <https://www.ohmsha.co.jp/book/9784274217883/>`_』
 | t-wadaさん `【翻訳】テスト駆動開発の定義 <https://t-wada.hatenablog.jp/entry/canon-tdd-by-kent-beck#%E7%BF%BB%E8%A8%B3%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA%E3%81%AE%E5%AE%9A%E7%BE%A9>`__
 
 私の言葉で説明すると
@@ -40,6 +40,8 @@ pytestでテストの書き方は皆さん体験したので、ここでは **�
 
 FizzBuzzを例にテスト駆動開発
 ----------------------------------------
+
+コミットログ版：https://github.com/ftnext/first-python-test-2024/commits/main/tdd
 
 FizzBuzzの仕様からテストリストを書き出す
 
@@ -235,8 +237,8 @@ Refactorの余地はなさそう
     def fizzbuzz(number: int) -> str:
         if number % 3 == 0:
             return "Fizz"
-        +if number % 5 == 0:
-        +    return "Buzz"
+    +    if number % 5 == 0:
+    +        return "Buzz"
         return str(number)
 
 🟩テストが通る (4/4)
@@ -270,8 +272,8 @@ Refactorの余地はなさそう
     :caption: src/fizzbuzz/core.py
 
     def fizzbuzz(number: int) -> str:
-        +if number % 15 == 0:
-        +    return "FizzBuzz"
+    +    if number % 15 == 0:
+    +        return "FizzBuzz"
         if number % 3 == 0:
             return "Fizz"
         if number % 5 == 0:
@@ -313,6 +315,9 @@ pytestの機能も使える
 
 この先の学習リソース
 ------------------------------
+
+* 『`テスト駆動Python 第2版`_』
+* 『`テスト駆動開発`_』
 
 pytestではないが、pytestに置き換えて進めていけるはず
 
