@@ -1,6 +1,8 @@
 準備
 ====================
 
+https://github.com/ftnext/first-python-test-2024 を開きます
+
 | どちらかを選んでください。
 | おすすめは選択肢1️⃣です。
 
@@ -10,6 +12,8 @@
 お手元のPCにPython環境が必要です。
 
 本リポジトリをclone（またはZIPダウンロード）
+
+.. image:: _static/local.png
 
 :file:`start` ディレクトリで進めます
 
@@ -29,7 +33,7 @@ Python 3.10以上（`Structural Pattern Matching <https://docs.python.org/ja/3.1
 
 ブラウザとGitHubアカウントだけ必要
 
-.. TODO Codespaceの場合
+.. image:: _static/codespaces.png
 
 Codespacesは使い捨ての環境なので、仮想環境は不要です。
 
