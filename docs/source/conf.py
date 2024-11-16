@@ -16,6 +16,7 @@ author = 'nikkie'
 extensions = [
     'sphinx.ext.githubpages',
     'sphinx_copybutton',
+    'sphinx_design',
     'sphinx_new_tab_link',
     'sphinxext.opengraph',
 ]
@@ -30,7 +31,10 @@ language = 'ja'
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
-html_css_files = ["https://fonts.googleapis.com/css2?family=BIZ+UDGothic"]
+html_css_files = [
+    "https://fonts.googleapis.com/css2?family=BIZ+UDGothic",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css",
+]
 html_theme_options = {"font_family": "BIZ UDGothic"}
 
 ogp_social_cards = {
