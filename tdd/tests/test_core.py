@@ -15,3 +15,7 @@ def test_3を渡すと文字列Fizzを返す():
 
 def test_5を渡すと文字列Buzzを返す():
     assert fizzbuzz(5) == "Buzz"
+
+
+def test_15を渡すと文字列FizzBuzzを返す():
+    assert fizzbuzz(15) == "FizzBuzz"
